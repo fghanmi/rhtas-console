@@ -24,6 +24,11 @@ func NewHandler(as services.ArtifactService, rs services.RekorService, ts servic
 	}
 }
 
+func (h *Handler) GetHealthz(w http.ResponseWriter, r *http.Request) {
+	response := map[string]string{"status": "ok"}
+	writeJSON(w, http.StatusOK, response)
+}
+
 func (h *Handler) PostApiV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
 	var req models.SignArtifactRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {

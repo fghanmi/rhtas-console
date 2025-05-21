@@ -97,7 +97,7 @@ type RekorEntry struct {
 	Uuid string `json:"uuid"`
 
 	// Verification Verification details for a Rekor entry, including inclusion proof and signed timestamp
-	Verification *Verification `json:"verification"`
+	Verification Verification `json:"verification"`
 }
 
 // RekorPublicKey defines model for RekorPublicKey.
@@ -167,7 +167,7 @@ type TrustConfig struct {
 // Verification Verification details for a Rekor entry, including inclusion proof and signed timestamp
 type Verification struct {
 	// InclusionProof Merkle tree inclusion proof for a Rekor entry
-	InclusionProof *InclusionProof `json:"inclusionProof"`
+	InclusionProof InclusionProof `json:"inclusionProof"`
 
 	// SignedEntryTimestamp Base64-encoded signed timestamp for the entry
 	SignedEntryTimestamp string `json:"signedEntryTimestamp"`
@@ -244,6 +244,9 @@ type ServerInterface interface {
 	// Get TUF targets and Fulcio certificate authorities
 	// (GET /api/v1/trust/config)
 	GetApiV1TrustConfig(w http.ResponseWriter, r *http.Request)
+
+	// (GET /healthz)
+	GetHealthz(w http.ResponseWriter, r *http.Request)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -283,6 +286,11 @@ func (_ Unimplemented) GetApiV1RekorPublicKey(w http.ResponseWriter, r *http.Req
 // Get TUF targets and Fulcio certificate authorities
 // (GET /api/v1/trust/config)
 func (_ Unimplemented) GetApiV1TrustConfig(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusNotImplemented)
+}
+
+// (GET /healthz)
+func (_ Unimplemented) GetHealthz(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -398,6 +406,21 @@ func (siw *ServerInterfaceWrapper) GetApiV1TrustConfig(w http.ResponseWriter, r 
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetApiV1TrustConfig(w, r)
+	}))
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		handler = middleware(handler)
+	}
+
+	handler.ServeHTTP(w, r.WithContext(ctx))
+}
+
+// GetHealthz operation middleware
+func (siw *ServerInterfaceWrapper) GetHealthz(w http.ResponseWriter, r *http.Request) {
+	ctx := r.Context()
+
+	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		siw.Handler.GetHealthz(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -537,6 +560,9 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	})
 	r.Group(func(r chi.Router) {
 		r.Get(options.BaseURL+"/api/v1/trust/config", wrapper.GetApiV1TrustConfig)
+	})
+	r.Group(func(r chi.Router) {
+		r.Get(options.BaseURL+"/healthz", wrapper.GetHealthz)
 	})
 
 	return r

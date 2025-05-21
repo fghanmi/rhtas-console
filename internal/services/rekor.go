@@ -25,8 +25,8 @@ func (s *rekorService) GetRekorEntry(ctx context.Context, uuid string) (models.R
 		IntegratedTime: 1747816420,
 		LogID:          "c0d23d6ad406973f9559f3ba2d1ca01f84147d8ffc5b8445c224f98b9591801d",
 		LogIndex:       216249784,
-		Verification: &models.Verification{
-			InclusionProof: &models.InclusionProof{
+		Verification: models.Verification{
+			InclusionProof: models.InclusionProof{
 				Checkpoint: "rekor.sigstore.dev - 1193050959916656506\n94345560\nmIq7oIDCYIfjP2wGrF+r+CTAAjyppyooQjGZtdh6XQc=\n\n— rekor.sigstore.dev wNI9ajBEAiBLqZTpbx5Ckvlvz/YXZ1aLk3q7TMBRtOa4wyYIPq/vRwIgTSo8mkOPZKfokHMePRNQ0XMAZG6Oc0KP0gKfqvzOLtA=\n",
 				Hashes: []string{
 					"fde82d05f63f2b3d1b8f4ed622517c941daeed51eeb7511664ec31ef289323e4",

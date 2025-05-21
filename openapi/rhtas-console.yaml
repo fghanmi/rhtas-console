@@ -14,6 +14,20 @@ tags:
   - name: Trust
     description: Operations for trust configuration and TUF targets
 paths:
+  /healthz:
+    get:
+      operationId: GetHealthz
+      responses:
+        '200':
+          description: Server is healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    enum: [ok]
   /api/v1/artifacts/sign:
     post:
       summary: Sign an artifact using Cosign
