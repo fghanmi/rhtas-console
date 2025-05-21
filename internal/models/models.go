@@ -218,32 +218,32 @@ type VerifyArtifactResponse struct {
 	Verified bool `json:"verified"`
 }
 
-// PostV1ArtifactsSignJSONRequestBody defines body for PostV1ArtifactsSign for application/json ContentType.
-type PostV1ArtifactsSignJSONRequestBody = SignArtifactRequest
+// PostApiV1ArtifactsSignJSONRequestBody defines body for PostApiV1ArtifactsSign for application/json ContentType.
+type PostApiV1ArtifactsSignJSONRequestBody = SignArtifactRequest
 
-// PostV1ArtifactsVerifyJSONRequestBody defines body for PostV1ArtifactsVerify for application/json ContentType.
-type PostV1ArtifactsVerifyJSONRequestBody = VerifyArtifactRequest
+// PostApiV1ArtifactsVerifyJSONRequestBody defines body for PostApiV1ArtifactsVerify for application/json ContentType.
+type PostApiV1ArtifactsVerifyJSONRequestBody = VerifyArtifactRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
 	// Sign an artifact using Cosign
-	// (POST /v1/artifacts/sign)
-	PostV1ArtifactsSign(w http.ResponseWriter, r *http.Request)
+	// (POST /api/v1/artifacts/sign)
+	PostApiV1ArtifactsSign(w http.ResponseWriter, r *http.Request)
 	// Verify an artifact using Cosign
-	// (POST /v1/artifacts/verify)
-	PostV1ArtifactsVerify(w http.ResponseWriter, r *http.Request)
+	// (POST /api/v1/artifacts/verify)
+	PostApiV1ArtifactsVerify(w http.ResponseWriter, r *http.Request)
 	// Get policies and attestations for an artifact
-	// (GET /v1/artifacts/{artifact}/policies)
-	GetV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request, artifact string)
+	// (GET /api/v1/artifacts/{artifact}/policies)
+	GetApiV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request, artifact string)
 	// Retrieve Rekor log entry by UUID
-	// (GET /v1/rekor/entries/{uuid})
-	GetV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request, uuid string)
+	// (GET /api/v1/rekor/entries/{uuid})
+	GetApiV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request, uuid string)
 	// Get Rekor public key
-	// (GET /v1/rekor/public-key)
-	GetV1RekorPublicKey(w http.ResponseWriter, r *http.Request)
+	// (GET /api/v1/rekor/public-key)
+	GetApiV1RekorPublicKey(w http.ResponseWriter, r *http.Request)
 	// Get TUF targets and Fulcio certificate authorities
-	// (GET /v1/trust/config)
-	GetV1TrustConfig(w http.ResponseWriter, r *http.Request)
+	// (GET /api/v1/trust/config)
+	GetApiV1TrustConfig(w http.ResponseWriter, r *http.Request)
 }
 
 // Unimplemented server implementation that returns http.StatusNotImplemented for each endpoint.
@@ -251,38 +251,38 @@ type ServerInterface interface {
 type Unimplemented struct{}
 
 // Sign an artifact using Cosign
-// (POST /v1/artifacts/sign)
-func (_ Unimplemented) PostV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
+// (POST /api/v1/artifacts/sign)
+func (_ Unimplemented) PostApiV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // Verify an artifact using Cosign
-// (POST /v1/artifacts/verify)
-func (_ Unimplemented) PostV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) {
+// (POST /api/v1/artifacts/verify)
+func (_ Unimplemented) PostApiV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // Get policies and attestations for an artifact
-// (GET /v1/artifacts/{artifact}/policies)
-func (_ Unimplemented) GetV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request, artifact string) {
+// (GET /api/v1/artifacts/{artifact}/policies)
+func (_ Unimplemented) GetApiV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request, artifact string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // Retrieve Rekor log entry by UUID
-// (GET /v1/rekor/entries/{uuid})
-func (_ Unimplemented) GetV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request, uuid string) {
+// (GET /api/v1/rekor/entries/{uuid})
+func (_ Unimplemented) GetApiV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request, uuid string) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // Get Rekor public key
-// (GET /v1/rekor/public-key)
-func (_ Unimplemented) GetV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
+// (GET /api/v1/rekor/public-key)
+func (_ Unimplemented) GetApiV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
 // Get TUF targets and Fulcio certificate authorities
-// (GET /v1/trust/config)
-func (_ Unimplemented) GetV1TrustConfig(w http.ResponseWriter, r *http.Request) {
+// (GET /api/v1/trust/config)
+func (_ Unimplemented) GetApiV1TrustConfig(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNotImplemented)
 }
 
@@ -295,12 +295,12 @@ type ServerInterfaceWrapper struct {
 
 type MiddlewareFunc func(http.Handler) http.Handler
 
-// PostV1ArtifactsSign operation middleware
-func (siw *ServerInterfaceWrapper) PostV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
+// PostApiV1ArtifactsSign operation middleware
+func (siw *ServerInterfaceWrapper) PostApiV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostV1ArtifactsSign(w, r)
+		siw.Handler.PostApiV1ArtifactsSign(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -310,12 +310,12 @@ func (siw *ServerInterfaceWrapper) PostV1ArtifactsSign(w http.ResponseWriter, r 
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// PostV1ArtifactsVerify operation middleware
-func (siw *ServerInterfaceWrapper) PostV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) {
+// PostApiV1ArtifactsVerify operation middleware
+func (siw *ServerInterfaceWrapper) PostApiV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.PostV1ArtifactsVerify(w, r)
+		siw.Handler.PostApiV1ArtifactsVerify(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -325,8 +325,8 @@ func (siw *ServerInterfaceWrapper) PostV1ArtifactsVerify(w http.ResponseWriter, 
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// GetV1ArtifactsArtifactPolicies operation middleware
-func (siw *ServerInterfaceWrapper) GetV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request) {
+// GetApiV1ArtifactsArtifactPolicies operation middleware
+func (siw *ServerInterfaceWrapper) GetApiV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var err error
@@ -341,7 +341,7 @@ func (siw *ServerInterfaceWrapper) GetV1ArtifactsArtifactPolicies(w http.Respons
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetV1ArtifactsArtifactPolicies(w, r, artifact)
+		siw.Handler.GetApiV1ArtifactsArtifactPolicies(w, r, artifact)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -351,8 +351,8 @@ func (siw *ServerInterfaceWrapper) GetV1ArtifactsArtifactPolicies(w http.Respons
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// GetV1RekorEntriesUuid operation middleware
-func (siw *ServerInterfaceWrapper) GetV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request) {
+// GetApiV1RekorEntriesUuid operation middleware
+func (siw *ServerInterfaceWrapper) GetApiV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	var err error
@@ -367,7 +367,7 @@ func (siw *ServerInterfaceWrapper) GetV1RekorEntriesUuid(w http.ResponseWriter, 
 	}
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetV1RekorEntriesUuid(w, r, uuid)
+		siw.Handler.GetApiV1RekorEntriesUuid(w, r, uuid)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -377,12 +377,12 @@ func (siw *ServerInterfaceWrapper) GetV1RekorEntriesUuid(w http.ResponseWriter, 
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// GetV1RekorPublicKey operation middleware
-func (siw *ServerInterfaceWrapper) GetV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
+// GetApiV1RekorPublicKey operation middleware
+func (siw *ServerInterfaceWrapper) GetApiV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetV1RekorPublicKey(w, r)
+		siw.Handler.GetApiV1RekorPublicKey(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -392,12 +392,12 @@ func (siw *ServerInterfaceWrapper) GetV1RekorPublicKey(w http.ResponseWriter, r 
 	handler.ServeHTTP(w, r.WithContext(ctx))
 }
 
-// GetV1TrustConfig operation middleware
-func (siw *ServerInterfaceWrapper) GetV1TrustConfig(w http.ResponseWriter, r *http.Request) {
+// GetApiV1TrustConfig operation middleware
+func (siw *ServerInterfaceWrapper) GetApiV1TrustConfig(w http.ResponseWriter, r *http.Request) {
 	ctx := r.Context()
 
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		siw.Handler.GetV1TrustConfig(w, r)
+		siw.Handler.GetApiV1TrustConfig(w, r)
 	}))
 
 	for _, middleware := range siw.HandlerMiddlewares {
@@ -521,22 +521,22 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	}
 
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/v1/artifacts/sign", wrapper.PostV1ArtifactsSign)
+		r.Post(options.BaseURL+"/api/v1/artifacts/sign", wrapper.PostApiV1ArtifactsSign)
 	})
 	r.Group(func(r chi.Router) {
-		r.Post(options.BaseURL+"/v1/artifacts/verify", wrapper.PostV1ArtifactsVerify)
+		r.Post(options.BaseURL+"/api/v1/artifacts/verify", wrapper.PostApiV1ArtifactsVerify)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/artifacts/{artifact}/policies", wrapper.GetV1ArtifactsArtifactPolicies)
+		r.Get(options.BaseURL+"/api/v1/artifacts/{artifact}/policies", wrapper.GetApiV1ArtifactsArtifactPolicies)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/rekor/entries/{uuid}", wrapper.GetV1RekorEntriesUuid)
+		r.Get(options.BaseURL+"/api/v1/rekor/entries/{uuid}", wrapper.GetApiV1RekorEntriesUuid)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/rekor/public-key", wrapper.GetV1RekorPublicKey)
+		r.Get(options.BaseURL+"/api/v1/rekor/public-key", wrapper.GetApiV1RekorPublicKey)
 	})
 	r.Group(func(r chi.Router) {
-		r.Get(options.BaseURL+"/v1/trust/config", wrapper.GetV1TrustConfig)
+		r.Get(options.BaseURL+"/api/v1/trust/config", wrapper.GetApiV1TrustConfig)
 	})
 
 	return r

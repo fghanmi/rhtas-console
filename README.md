@@ -43,7 +43,7 @@ The RHTAS Console is a Go-based RESTful API server, providing functionality for 
    go build -o rhtas_console ./cmd/rhtas_console
    ```
 
-4 . **Run the Server**:
+4. **Run the Server**:
 
    ```bash
    ./rhtas_console
@@ -69,19 +69,19 @@ The backend exposes the following RESTful endpoints, as defined in the OpenAPI s
 
 | Method | Endpoint                          | Description                                      |
 |--------|-----------------------------------|--------------------------------------------------|
-| POST   | `/v1/artifacts/sign`             | Signs an artifact using Cosign.                  |
-| POST   | `/v1/artifacts/verify`           | Verifies an artifact using Cosign.               |
-| GET    | `/v1/artifacts/{artifact}/policies` | Retrieves policies and attestations for an artifact. |
-| GET    | `/v1/rekor/entries/{uuid}`       | Retrieves a Rekor transparency log entry by UUID. |
-| GET    | `/v1/rekor/public-key`           | Retrieves the Rekor public key in PEM format.     |
-| GET    | `/v1/trust/config`               | Retrieves TUF targets and Fulcio certificate authorities. |
+| POST   | `/api/v1/artifacts/sign`             | Signs an artifact using Cosign.                  |
+| POST   | `/api/v1/artifacts/verify`           | Verifies an artifact using Cosign.               |
+| GET    | `/api/v1/artifacts/{artifact}/policies` | Retrieves policies and attestations for an artifact. |
+| GET    | `/api/v1/rekor/entries/{uuid}`       | Retrieves a Rekor transparency log entry by UUID. |
+| GET    | `/api/v1/rekor/public-key`           | Retrieves the Rekor public key in PEM format.     |
+| GET    | `/api/v1/trust/config`               | Retrieves TUF targets and Fulcio certificate authorities. |
 
 #### Example: Sign an Artifact
 
 To sign a container image using Cosign (keyless signing with OIDC token):
 
 ```bash
-curl -X POST http://localhost:8080/v1/artifacts/sign \
+curl -X POST http://localhost:8080/api/v1/artifacts/sign \
   -H "Content-Type: application/json" \
   -d '{
     "artifact": "quay.io/example/app:latest",
@@ -110,7 +110,7 @@ Response:
 To fetch a Rekor entry by UUID:
 
 ```bash
-curl -X GET http://localhost:8080/v1/rekor/entries/108e9186e8c5677a249f2ad46ab96976656298b3feb5e031777b9e1fa5c55aaf7e0115bee955ccaa
+curl -X GET http://localhost:8080/api/v1/rekor/entries/108e9186e8c5677a249f2ad46ab96976656298b3feb5e031777b9e1fa5c55aaf7e0115bee955ccaa
 ```
 
 Response:

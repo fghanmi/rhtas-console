@@ -14,7 +14,7 @@ tags:
   - name: Trust
     description: Operations for trust configuration and TUF targets
 paths:
-  /v1/artifacts/sign:
+  /api/v1/artifacts/sign:
     post:
       summary: Sign an artifact using Cosign
       tags:
@@ -44,7 +44,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/artifacts/verify:
+  /api/v1/artifacts/verify:
     post:
       summary: Verify an artifact using Cosign
       tags:
@@ -74,7 +74,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/rekor/entries/{uuid}:
+  /api/v1/rekor/entries/{uuid}:
     get:
       summary: Retrieve Rekor log entry by UUID
       tags:
@@ -104,7 +104,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/rekor/public-key:
+  /api/v1/rekor/public-key:
     get:
       summary: Get Rekor public key
       tags:
@@ -122,7 +122,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/artifacts/{artifact}/policies:
+  /api/v1/artifacts/{artifact}/policies:
     get:
       summary: Get policies and attestations for an artifact
       tags:
@@ -153,7 +153,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /v1/trust/config:
+  /api/v1/trust/config:
     get:
       summary: Get TUF targets and Fulcio certificate authorities
       tags:

@@ -8,10 +8,10 @@ import (
 func RegisterRoutes(r *chi.Mux, as services.ArtifactService, rs services.RekorService, ts services.TrustService) {
 	handler := NewHandler(as, rs, ts)
 
-	r.Post("/v1/artifacts/sign", handler.PostV1ArtifactsSign)
-	r.Post("/v1/artifacts/verify", handler.PostV1ArtifactsVerify)
-	r.Get("/v1/artifacts/{artifact}/policies", handler.GetV1ArtifactsArtifactPolicies)
-	r.Get("/v1/rekor/entries/{uuid}", handler.GetV1RekorEntriesUuid)
-	r.Get("/v1/rekor/public-key", handler.GetV1RekorPublicKey)
-	r.Get("/v1/trust/config", handler.GetV1TrustConfig)
+	r.Post("/api/v1/artifacts/sign", handler.PostApiV1ArtifactsSign)
+	r.Post("/api/v1/artifacts/verify", handler.PostApiV1ArtifactsVerify)
+	r.Get("/api/v1/artifacts/{artifact}/policies", handler.GetApiV1ArtifactsArtifactPolicies)
+	r.Get("/api/v1/rekor/entries/{uuid}", handler.GetApiV1RekorEntriesUuid)
+	r.Get("/api/v1/rekor/public-key", handler.GetApiV1RekorPublicKey)
+	r.Get("/api/v1/trust/config", handler.GetApiV1TrustConfig)
 }

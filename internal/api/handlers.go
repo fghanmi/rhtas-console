@@ -24,7 +24,7 @@ func NewHandler(as services.ArtifactService, rs services.RekorService, ts servic
 	}
 }
 
-func (h *Handler) PostV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) PostApiV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
 	var req models.SignArtifactRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "Invalid request body")
@@ -38,7 +38,7 @@ func (h *Handler) PostV1ArtifactsSign(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, resp)
 }
 
-func (h *Handler) PostV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) PostApiV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) {
 	var req models.VerifyArtifactRequest
 	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
 		writeError(w, http.StatusBadRequest, "Invalid request body")
@@ -52,7 +52,7 @@ func (h *Handler) PostV1ArtifactsVerify(w http.ResponseWriter, r *http.Request) 
 	writeJSON(w, http.StatusOK, resp)
 }
 
-func (h *Handler) GetV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetApiV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request) {
 	uuid := chi.URLParam(r, "uuid")
 	if uuid == "" {
 		writeError(w, http.StatusBadRequest, "Missing UUID")
@@ -66,7 +66,7 @@ func (h *Handler) GetV1RekorEntriesUuid(w http.ResponseWriter, r *http.Request) 
 	writeJSON(w, http.StatusOK, resp)
 }
 
-func (h *Handler) GetV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetApiV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.rekorService.GetRekorPublicKey(r.Context())
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
@@ -75,7 +75,7 @@ func (h *Handler) GetV1RekorPublicKey(w http.ResponseWriter, r *http.Request) {
 	writeJSON(w, http.StatusOK, resp)
 }
 
-func (h *Handler) GetV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetApiV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.Request) {
 	artifact := chi.URLParam(r, "artifact")
 	if artifact == "" {
 		writeError(w, http.StatusBadRequest, "Missing artifact")
@@ -89,7 +89,7 @@ func (h *Handler) GetV1ArtifactsArtifactPolicies(w http.ResponseWriter, r *http.
 	writeJSON(w, http.StatusOK, resp)
 }
 
-func (h *Handler) GetV1TrustConfig(w http.ResponseWriter, r *http.Request) {
+func (h *Handler) GetApiV1TrustConfig(w http.ResponseWriter, r *http.Request) {
 	resp, err := h.trustService.GetTrustConfig(r.Context())
 	if err != nil {
 		writeError(w, http.StatusInternalServerError, err.Error())
